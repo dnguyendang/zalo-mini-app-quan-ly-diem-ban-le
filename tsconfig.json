@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "baseUrl": "./src",
+        "baseUrl": ".",
         "noEmit": true,
         "target": "es6",
         "module": "esnext",
@@ -30,9 +30,16 @@
         "resolveJsonModule": true,
         "types": ["node", "vite/client"],
         "paths": {
-            "@dts": ["types"],
-            "@dts/*": ["types/*"],
-            "@*": ["*"]
+            "@/*": ["src/*"],
+            "@dts/*": ["src/types/*"],
+            "@components/*": ["src/components/*"],
+            "@constants/*": ["src/constants/*"],
+            "@service/*": ["src/service/*"],
+            "@store/*": ["src/store/*"],
+            "@pages/*": ["src/pages/*"],
+            "@utils/*": ["src/utils/*"],
+            "@assets/*": ["src/assets/*"],
+            "@mock/*": ["src/mock/*"]
         }
     },
     "exclude": ["node_modules"],

@@ -9,9 +9,10 @@ import ErrorNotification from "./notifications/ErrorNotification";
 const MyApp = () => {
     const token = useStore(state => state.token);
 
-    const [, getOrganization] = useStore(state => [
+    const [, getOrganization, getUserInfo] = useStore(state => [
         state.organization,
         state.getOrganization,
+        state.getUserInfo,
     ]);
 
     const getOrg = async () => {
@@ -25,6 +26,7 @@ const MyApp = () => {
     useEffect(() => {
         if (token) {
             getOrg();
+            getUserInfo();
         }
     }, [token]);
 
@@ -38,4 +40,5 @@ const MyApp = () => {
         </App>
     );
 };
+
 export default MyApp;

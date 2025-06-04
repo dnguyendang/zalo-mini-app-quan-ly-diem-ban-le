@@ -2,7 +2,6 @@ export { default as App } from "./app";
 export * from "./layout";
 export * from "./utilities";
 export * from "./oa";
-export * from "./news";
 export * from "./common";
 export * from "./customized";
 export * from "./collapse";

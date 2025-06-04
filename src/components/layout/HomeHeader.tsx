@@ -2,10 +2,6 @@ import React, { FC } from "react";
 import { Box } from "zmp-ui";
 import styled from "styled-components";
 import tw from "twin.macro";
-import Logo from "@assets/logo.png";
-import TextItemSkeleton from "@components/skeleton/TextSketeton";
-import { useStore } from "@store";
-import Background from "@assets/header-background.png";
 
 export interface HomeHeaderProps {
     title: string;
@@ -13,54 +9,53 @@ export interface HomeHeaderProps {
 }
 
 const HeaderContainer = styled.div`
-    ${tw`flex flex-row bg-main text-white items-center fixed top-0 left-0 w-full px-4 h-[calc(48px + var(--zaui-safe-area-inset-top, 0px))]`};
-    padding-top: var(--zaui-safe-area-inset-top);
+    ${tw`flex items-center fixed top-0 left-0 w-full px-4 h-[calc(48px + var(--zaui-safe-area-inset-top, 0px))]`};
     z-index: 1;
-    background: linear-gradient(
-            0deg,
-            rgba(4, 109, 214, 0.9),
-            rgba(4, 109, 214, 0.9)
-        ),
-        url(${Background});
-    background-size: cover;
-    background-position: center;
+    background: white;
 `;
 
-const Title = styled.div`
-    ${tw`text-base font-medium`}
+const HeaderContent = styled.div`
+    ${tw`flex items-center gap-3 w-full`};
 `;
 
 const LogoWrapper = styled.div`
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
     position: relative;
-    margin-right: 8px;
+    border-radius: 8px;
+    overflow: hidden;
 `;
 
-const StyledText = styled.div`
-    ${tw`text-wth_a70 text-xs`}
-    min-height: 16px;
+const TextContainer = styled.div`
+    ${tw`flex flex-col`};
 `;
+
+const Title = styled.h1`
+    ${tw`text-lg font-bold text-gray-800 m-0`};
+`;
+
+const Subtitle = styled.p`
+    ${tw`text-sm text-gray-600 m-0`};
+`;
+
 const HomeHeader: FC<HomeHeaderProps> = props => {
     const { title, name } = props;
-    const loading = useStore(state => state.gettingOrganization);
+
     return (
         <HeaderContainer>
-            <LogoWrapper>
-                <img src={Logo} alt={title} />
-            </LogoWrapper>
-            <Box flex flexDirection="column">
-                <Title>{title}</Title>
-                {loading ? (
-                    <TextItemSkeleton
-                        color="rgba(255,255,255,0.2)"
-                        height={16}
-                        width={180}
+            <HeaderContent>
+                <LogoWrapper>
+                    <img 
+                        src="/icons/mobifone-logo.png" 
+                        alt="MobiFone"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
-                ) : (
-                    <StyledText>{name}</StyledText>
-                )}
-            </Box>
+                </LogoWrapper>
+                <TextContainer>
+                    <Title>{title}</Title>
+                    <Subtitle>{name}</Subtitle>
+                </TextContainer>
+            </HeaderContent>
         </HeaderContainer>
     );
 };

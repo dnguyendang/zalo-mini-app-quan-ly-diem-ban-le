@@ -4,6 +4,7 @@ import { Page } from "zmp-ui";
 import { PageProps } from "zmp-ui/page";
 import tw from "twin.macro";
 import DefaultHeader from "./DefaultHeader";
+import BottomNavigation from './BottomNavigation';
 
 interface PropsType extends PageProps {
     children?: ReactNode;
@@ -52,6 +53,7 @@ const PageLayout = React.forwardRef<HTMLDivElement, PropsType>((props, ref) => {
         >
             {customHeader || <DefaultHeader title={title} back />}
             {children}
+            <BottomNavigation />
         </StyledPage>
     );
 });

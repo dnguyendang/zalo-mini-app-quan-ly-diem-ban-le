@@ -6,14 +6,13 @@ import path from "path";
 // https://vitejs.dev/config/
 export default () => {
     return defineConfig({
-        root: "./src",
-        base: "./",
         plugins: [react(), macrosPlugin()],
         build: {
             target: "es2020",
         },
         resolve: {
             alias: {
+                "@": path.resolve(__dirname, "src"),
                 "@assets": path.resolve(__dirname, "src/assets"),
                 "@components": path.resolve(__dirname, "src/components"),
                 "@common": path.resolve(__dirname, "src/common"),
