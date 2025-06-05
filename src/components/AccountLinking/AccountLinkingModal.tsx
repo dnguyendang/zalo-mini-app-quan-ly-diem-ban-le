@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Box, Button, Text } from 'zmp-ui';
+import { Modal, Box, Button, Text, Icon } from 'zmp-ui';
 import { userService } from '@/service/user';
 import { requirePermission } from '@/utils/phone';
 
@@ -52,36 +52,67 @@ const AccountLinkingModal: React.FC<AccountLinkingModalProps> = ({
     <Modal
       visible={visible}
       onClose={onClose}
-      title="Liên kết tài khoản"
+      title=""
       modalClassName="account-linking-modal"
     >
-      <Box p={4}>
-        <Text.Title size="small" className="mb-4">
-          Chào mừng bạn đến với MobiFone 5 Chuyển đổi số!
-        </Text.Title>
-        
-        <Box className="mb-4">
-          
-          <Text>Vui lòng đồng ý chia sẻ số điện thoại để liên kết với tài khoản của bạn trên hệ thống MobiFone 5 Chuyển đổi số</Text>
-          <Text>Liên kết tài khoản để trải nghiệm tốt hơn</Text>
-          <Text>- Quản lý thông tin điểm bán lẻ</Text>
-          <Text>- Tra cứu trạng đơn hàng</Text>
-          <Text>- Tra cứu tình trạng khiếu nại</Text>
-        </Box>
+      <Box p={4} className="text-center">
+        <img 
+          src="/images/banner/mobifone-logo-oa.png" 
+          alt="Account Linking" 
+          className="w-full h-auto mb-6 rounded" // full chiều rộng và khoảng cách dưới
+        />
 
-        {error && (
-          <Text color="danger" className="mb-4">
-            {error}
-          </Text>
-        )}
+        <Text.Title size="small" className="mb-5 font-semibold text-center">
+          Chào mừng bạn đến với Kênh phân phối Mobifone KV5!
+        </Text.Title>
+
+        <Box className="mb-8 text-left space-y-4 text-sm">
+          <Box className="flex items-center">
+            <Icon icon="zi-location-solid" className="mr-3 text-primary" size={20} />
+            <span>Quản lý thông tin điểm bán lẻ</span>
+          </Box>
+
+          <Box className="flex items-center">
+            <Icon icon="zi-search" className="mr-3 text-primary" size={20} />
+            <span>Tra cứu tình trạng đơn hàng</span>
+          </Box>
+
+          <Box className="flex items-center">
+            <Icon icon="zi-search" className="mr-3 text-primary" size={20} />
+            <span>Tra cứu tình trạng khiếu nại</span>
+          </Box>
+
+          <Box className="flex items-center">
+            <Icon icon="zi-post" className="mr-3 text-primary" size={20} />
+            <span>Xem thông tin chính sách</span>
+          </Box>
+        </Box>
+        <Text className="mb-6 text-sm text-center">   
+          *** Vui lòng đồng ý chia sẻ số điện thoại để liên kết với tài khoản của bạn trên hệ thống Kênh phân phối Mobifone KV5 ***
+        </Text>
+
+          {error && (
+            <Text color="danger" className="mb-4 font-semibold">
+              {error}
+            </Text>
+          )}
 
         <Button
           fullWidth
           loading={loading}
           disabled={loading}
           onClick={handleLinkAccount}
+          className="mb-3"
         >
           Liên kết số điện thoại
+        </Button>
+
+        <Button
+          fullWidth
+          variant="secondary"
+          onClick={onClose}
+        >
+          Từ chối và Thoát
         </Button>
       </Box>
     </Modal>

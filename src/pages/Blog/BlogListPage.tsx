@@ -93,7 +93,8 @@ const BlogListPage: React.FC = () => {
     };
 
     const renderPagination = () => {
-        const pages = [];
+        // const pages = [];
+        const pages: React.ReactNode[] = [];
         const maxVisiblePages = 5;
         
         // Always show first page
@@ -192,10 +193,10 @@ const BlogListPage: React.FC = () => {
                     <EmptyMessage>Chưa có bài viết nào</EmptyMessage>
                 ) : (
                     <>
-                        {/* {blogs.map(blog => (
+                        {blogs.map(blog => (
                             <BlogCard key={blog.id} blog={blog} /> 
-                        ))} */}
-                        <BlogHighlights />   
+                        ))}
+                        {/* <BlogHighlights />    */}
                         <PaginationContainer>
                             {renderPagination()}
                         </PaginationContainer>

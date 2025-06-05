@@ -18,7 +18,7 @@ interface PropsType extends PageProps {
 
 const StyledPage = styled(Page)`
     ${tw`bg-[#EAEBED]`}
-    padding: calc(var(--zaui-safe-area-inset-top, 0px) + 48px) 0 var(--zaui-safe-area-inset-bottom) 0;
+    padding: calc(var(--zaui-safe-area-inset-top, 0px) + 48px) 0 calc(var(--zaui-safe-area-inset-bottom) + 56px) 0;
     ${({ $bg }: { $bg?: string }) => {
         if (!$bg) {
             return "";
@@ -53,7 +53,7 @@ const PageLayout = React.forwardRef<HTMLDivElement, PropsType>((props, ref) => {
         >
             {customHeader || <DefaultHeader title={title} back />}
             {children}
-            <BottomNavigation />
+            <BottomNavigation/>
         </StyledPage>
     );
 });
