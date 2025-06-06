@@ -13,8 +13,9 @@ const MENU_ITEMS = [
     id: 'retails',
     title: 'Điểm bán lẻ',
     icon: '/icons/retail.png',
-    path: '/retails',
-    requiresAuth: true
+    path: 'https://kpp.mobifone5.vn/diem-ban-le',
+    requiresAuth: true,
+    isExternal: true
   },
   {
     id: 'orders',
@@ -106,6 +107,11 @@ const HomePage: React.FC = () => {
                   if (item.requiresAuth && !isLinked) {
                     e.preventDefault();
                     setShowLinkingModal(true);
+                    return;
+                  }
+                  if (item.isExternal) {
+                    e.preventDefault();
+                    window.location.href = item.path;
                   }
                 }}
               >

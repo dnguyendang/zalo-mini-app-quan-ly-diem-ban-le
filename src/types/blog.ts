@@ -6,7 +6,7 @@ export interface BlogPost {
     website_published: boolean;
     post_date: string;
     create_date: string;
-    blog_id: number | null;
+    blog_id: number;
     visits: number;
     cover_properties: string;
     website_meta_title: string;
