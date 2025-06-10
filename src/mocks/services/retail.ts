@@ -1,5 +1,5 @@
 import { mockRetailPoints } from '../data/retails';
-import { RetailPoint } from '@/types/retail';
+import { RetailPoint } from '@/types/retailer';
 
 export const RetailService = {
   getRetailPoints: async (page: number = 1, pageSize: number = 10): Promise<{

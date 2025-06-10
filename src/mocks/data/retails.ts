@@ -1,4 +1,4 @@
-import { RetailPoint } from '@/types/retail';
+import { RetailPoint } from '@/types/retailer';
 
 export const mockRetailPoints: RetailPoint[] = [
   {

@@ -9,13 +9,17 @@ const BottomNavigation: React.FC = () => {
   const isHome = location.pathname === '/';
 
   const handleContactClick = async () => {
+    console.log('Contact button clicked');
     try {
+      console.log('Attempting to open chat...');
       await openChat({
         type: 'oa',
-        id: 'mobifone5cds', // Thay thế bằng ID OA thực tế
+        id: '184122995578292634',
       });
+      console.log('Chat opened successfully');
     } catch (error) {
       console.error('Error opening chat:', error);
+      alert('Không thể mở chat. Vui lòng thử lại sau.');
     }
   };
 
@@ -28,15 +32,22 @@ const BottomNavigation: React.FC = () => {
         </Text>
       </Link>
 
-      <Box 
-        className={styles.navItem} 
+      <button 
+        className={styles.navItem}
         onClick={handleContactClick}
+        style={{ 
+          background: 'none',
+          border: 'none',
+          padding: 0,
+          cursor: 'pointer',
+          width: '100%'
+        }}
       >
         <Icon icon="zi-chat" />
         <Text size="xSmall" className={styles.navText}>
           Liên hệ
         </Text>
-      </Box>
+      </button>
     </Box>
   );
 };

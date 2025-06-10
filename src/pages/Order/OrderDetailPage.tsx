@@ -322,7 +322,7 @@ const OrderDetailPage: React.FC = () => {
                                 onClick={handleReceiveOrder}
                                 disabled={submitting}
                             >
-                                Xác nhận đã nhận hàng
+                                Đã nhận
                             </Button>
                         )}
                         {canCancel && (

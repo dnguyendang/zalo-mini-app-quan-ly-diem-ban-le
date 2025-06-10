@@ -66,7 +66,7 @@ export const userService = {
         }
     },
   
-    linkAccount: async (phoneToken: string): Promise<LinkAccountResponse> => {
+    linkAccount: async (phoneToken: string, linkToken: string): Promise<LinkAccountResponse> => {
         try {
             const zaloId = await getUserZaloId();
             const accessToken = await getZaloAccessToken();
@@ -77,8 +77,9 @@ export const userService = {
                 },
                 body: JSON.stringify({
                     zalo_user_id: zaloId,
-                    zalo_phone_token: phoneToken,
+                    phone_token: phoneToken,
                     access_token: accessToken,
+                    link_token: linkToken
                 }),
             });
         

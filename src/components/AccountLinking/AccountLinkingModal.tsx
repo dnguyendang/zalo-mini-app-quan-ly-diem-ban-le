@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Box, Button, Text, Icon } from 'zmp-ui';
+import { Modal, Box, Button, Text, Icon, Input } from 'zmp-ui';
 import { userService } from '@/service/user';
 import { requirePermission } from '@/utils/phone';
 
@@ -16,8 +16,10 @@ const AccountLinkingModal: React.FC<AccountLinkingModalProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [tokenLink, setTokenLink] = useState('');
 
-  const handleLinkAccount = async () => {
+
+  const handleLinkAccount = async (linkToken: string) => {
     setLoading(true);
     setError('');
 
@@ -29,9 +31,14 @@ const AccountLinkingModal: React.FC<AccountLinkingModalProps> = ({
         return;
       }
 
+      // if (!tokenLink || tokenLink.trim() === '') {
+      //   setError('Vui lòng nhập token liên kết.');
+      //   return;
+      // }
+
       console.log('Attempting to link account with phone token');
 
-      const response = await userService.linkAccount(phoneToken);
+      const response = await userService.linkAccount(phoneToken, linkToken.trim());
       console.log('Link account response:', response);
 
       if (response.status === 'success') {
@@ -91,6 +98,18 @@ const AccountLinkingModal: React.FC<AccountLinkingModalProps> = ({
           *** Vui lòng đồng ý chia sẻ số điện thoại để liên kết với tài khoản của bạn trên hệ thống Kênh phân phối Mobifone KV5 ***
         </Text>
 
+        {/* Ô nhập token liên kết */}
+        <Box className="mb-4 text-left">
+          <Text className="block mb-2 text-sm font-medium text-center">
+            Nhập code nhân viên cấp cung để liên kết tài khoản:
+          </Text>
+          <Input
+            value={tokenLink}
+            onChange={(e) => setTokenLink(e.target.value)}
+            placeholder="Nhập token..."
+            clearable
+          />
+        </Box>
           {error && (
             <Text color="danger" className="mb-4 font-semibold">
               {error}
@@ -101,7 +120,7 @@ const AccountLinkingModal: React.FC<AccountLinkingModalProps> = ({
           fullWidth
           loading={loading}
           disabled={loading}
-          onClick={handleLinkAccount}
+          onClick={() => handleLinkAccount(tokenLink)}
           className="mb-3"
         >
           Liên kết số điện thoại

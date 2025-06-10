@@ -7,15 +7,16 @@ import PageLayout from "@/components/layout/PageLayout";
 import HomeHeader from "@/components/layout/HomeHeader";
 import { useAccountLinking } from "@/hooks/useAccountLinking";
 import AccountLinkingModal from "@/components/AccountLinking/AccountLinkingModal";
+import { useStore } from "../../store";
+import { OrganizationSlice } from "../../store/organizationSlice";
 
 const MENU_ITEMS = [
   {
     id: 'retails',
     title: 'Điểm bán lẻ',
     icon: '/icons/retail.png',
-    path: 'https://kpp.mobifone5.vn/diem-ban-le',
+    path: '/retailer',
     requiresAuth: true,
-    isExternal: true
   },
   {
     id: 'orders',
@@ -48,6 +49,16 @@ const HomePage: React.FC = () => {
     setShowLinkingModal,
     checkAccountLinking,
   } = useAccountLinking();
+
+  const followOA = useStore(state => state.followOA);
+  const organization = useStore(state => state.organization);
+  const isFollowed = organization?.officialAccounts?.some(oa => oa.oaId === '184122995578292634' && oa.follow);
+
+  const handleFollowOA = () => {
+    if (!isFollowed) {
+      followOA({ id: '184122995578292634' });
+    }
+  };
 
   if (isChecking) {
     return (
@@ -145,8 +156,16 @@ const HomePage: React.FC = () => {
                 Official Account
               </p>
             </Box>
-            <button className={styles.promotionButton}>
-              Quan tâm
+            <button 
+              className={styles.promotionButton}
+              onClick={handleFollowOA}
+              disabled={isFollowed}
+              style={{ 
+                opacity: isFollowed ? 0.6 : 1,
+                cursor: isFollowed ? 'default' : 'pointer'
+              }}
+            >
+              {isFollowed ? 'Đã quan tâm' : 'Quan tâm'}
             </button>
           </Box>
         </Box>

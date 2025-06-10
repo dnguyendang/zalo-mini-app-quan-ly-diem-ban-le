@@ -152,7 +152,7 @@ const BlogDetailPage: React.FC = () => {
                     <Content dangerouslySetInnerHTML={{ __html: blog.content }} />
                 </ContentWrapper>
                 <Footer>
-                    <Logo src="/assets/mobifone-logo.png" alt="MobiFone Logo" />
+                    <Logo src="/icons/logo.png" alt="MobiFone Logo" />
                     <FooterText>
                         © 2025 MobiFone. Tất cả quyền được bảo lưu.
                     </FooterText>
