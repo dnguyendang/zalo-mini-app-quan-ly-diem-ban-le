@@ -1,17 +1,23 @@
 import { API_BASE_URL } from '@/constants/config';
+import { create } from 'domain';
 import { getUserInfo, getAccessToken } from 'zmp-sdk';
 
 interface CheckZaloIdResponse {
   status: string;
   message: string;
   is_linked: boolean;
-  user_id: number | null;
+//   user_id: number | null;
 }
 
 interface LinkAccountResponse {
   status: string;
   message: string;
-  user_id: number;
+//   user_id: number;
+}
+
+interface CreateAccountResponse {
+  status: string;
+  message: string;
 }
 
 // Hàm helper để lấy Zalo ID của người dùng
@@ -40,6 +46,36 @@ const getZaloAccessToken = async () => {
 };
 
 export const userService = {
+    createAccount: async (name: string, email: string, password: string ): Promise<CreateAccountResponse> => {
+        try {
+            const zaloId = await getUserZaloId();
+            const response = await fetch(`${API_BASE_URL}/users/api/create-account`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    zalo_user_id: zaloId,
+                    name: name,
+                    email: email,
+                    password: password,
+                }),
+            });
+        
+            if (!response.ok) {
+                console.error('API Error:', response.status, response.statusText);
+                const errorText = await response.text();
+                console.error('Error details:', errorText);
+                throw new Error('Không thể tạo tài khoản');
+            }
+            const data = await response.json();
+            console.log('API createAccount Response:', data);
+            return data;
+        } catch (error) {
+            console.error('Error creating account:', error);
+            throw error;
+        }
+    },
 
     checkZaloId: async (): Promise<CheckZaloIdResponse> => {
         try {
@@ -58,7 +94,7 @@ export const userService = {
                 throw new Error('Failed to check Zalo ID');
             }
             const data = await response.json();
-            console.log('API Response:', data);
+            console.log('API checkZaloId Response:', data);
             return data;
         } catch (error) {
             console.error('Error checking Zalo ID:', error);
@@ -66,7 +102,7 @@ export const userService = {
         }
     },
   
-    linkAccount: async (phoneToken: string, linkToken: string): Promise<LinkAccountResponse> => {
+    linkAccount: async (phoneToken: string): Promise<LinkAccountResponse> => {
         try {
             const zaloId = await getUserZaloId();
             const accessToken = await getZaloAccessToken();
@@ -79,7 +115,6 @@ export const userService = {
                     zalo_user_id: zaloId,
                     phone_token: phoneToken,
                     access_token: accessToken,
-                    link_token: linkToken
                 }),
             });
         
@@ -90,11 +125,14 @@ export const userService = {
                 throw new Error('Không thể liên kết tài khoản');
             }
             const data = await response.json();
-            console.log('API Response:', data);
+            console.log('API linkAccount Response:', data);
             return data;
         } catch (error) {
             console.error('Error linking account:', error);
             throw error;
         }
     },
-  }; 
+
+
+}; 
+

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Box, Button, Text, Icon, Input } from 'zmp-ui';
 import { userService } from '@/service/user';
 import { requirePermission } from '@/utils/phone';
+import CreateAccountModal from './CreateAccountModal';
 
 interface AccountLinkingModalProps {
   visible: boolean;
@@ -16,36 +17,32 @@ const AccountLinkingModal: React.FC<AccountLinkingModalProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [tokenLink, setTokenLink] = useState('');
-
-
-  const handleLinkAccount = async (linkToken: string) => {
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  
+  const handleLinkAccount = async () => {
     setLoading(true);
     setError('');
-
     try {
       const phoneToken = await requirePermission();
-      
       if (!phoneToken) {
         setError('Không thể lấy được token số điện thoại. Vui lòng thử lại.');
         return;
       }
-
-      // if (!tokenLink || tokenLink.trim() === '') {
-      //   setError('Vui lòng nhập token liên kết.');
-      //   return;
-      // }
-
-      console.log('Attempting to link account with phone token');
-
-      const response = await userService.linkAccount(phoneToken, linkToken.trim());
-      console.log('Link account response:', response);
+      const response = await userService.linkAccount(phoneToken);
 
       if (response.status === 'success') {
         onSuccess();
         onClose();
       } else {
-        setError('Liên kết tài khoản thất bại: ' + (response.message || 'Lỗi không xác định'));
+        // Nếu lỗi là chưa đăng ký tài khoản thì mở modal đăng ký
+        if (
+          response.message &&
+          response.message.toLowerCase().includes("chưa đăng ký")
+        ) {
+          setShowRegisterModal(true);
+        } else {
+          setError(response.message || "Không thể liên kết tài khoản.");
+        }
       }
     } catch (err) {
       console.error('Error linking account:', err);
@@ -98,34 +95,16 @@ const AccountLinkingModal: React.FC<AccountLinkingModalProps> = ({
           *** Vui lòng đồng ý chia sẻ số điện thoại để liên kết với tài khoản của bạn trên hệ thống Kênh phân phối Mobifone KV5 ***
         </Text>
 
-        {/* Ô nhập token liên kết */}
-        <Box className="mb-4 text-left">
-          <Text className="block mb-2 text-sm font-medium text-center">
-            Nhập code nhân viên cấp cung để liên kết tài khoản:
-          </Text>
-          <Input
-            value={tokenLink}
-            onChange={(e) => setTokenLink(e.target.value)}
-            placeholder="Nhập token..."
-            clearable
-          />
-        </Box>
-          {error && (
-            <Text color="danger" className="mb-4 font-semibold">
-              {error}
-            </Text>
-          )}
-
+        {error && <Text className="text-danger">{error}</Text>}
         <Button
           fullWidth
           loading={loading}
           disabled={loading}
-          onClick={() => handleLinkAccount(tokenLink)}
+          onClick={() => handleLinkAccount()}
           className="mb-3"
         >
           Liên kết số điện thoại
         </Button>
-
         <Button
           fullWidth
           variant="secondary"
@@ -133,6 +112,18 @@ const AccountLinkingModal: React.FC<AccountLinkingModalProps> = ({
         >
           Từ chối và Thoát
         </Button>
+
+        {/* Modal đăng ký tài khoản */}
+        <CreateAccountModal
+          visible={showRegisterModal}
+          onClose={() => setShowRegisterModal(false)}
+          onSuccess={() => {
+            setShowRegisterModal(false);
+            onSuccess();
+            onClose();
+          }}
+          userService={userService}
+        />
       </Box>
     </Modal>
   );

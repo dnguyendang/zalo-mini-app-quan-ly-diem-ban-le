@@ -14,6 +14,8 @@ import ComplaintListPage from "./Complaint/ComplaintListPage";
 import ComplaintDetailPage from "./Complaint/ComplaintDetailPage";
 import ComplaintCreatePage from "./Complaint/ComplaintCreatePage";
 import RetailerDetailPage from "./Retailer/RetailerDetailPage";
+import RetailerRouterPage from "./Retailer/RetailerRouterPage";
+import RetailerCreatePage from "./Retailer/RetailerCreatePage";
 
 const Routes: React.FC = () => (
     <ZMPRouter>
@@ -34,7 +36,10 @@ const Routes: React.FC = () => (
             <Route path="/complaints/:complaintId" element={<ComplaintDetailPage />} />
             <Route path="/complaints/create" element={<ComplaintCreatePage />} />
 
-            <Route path="/retailer" element={<RetailerDetailPage />} />
+            <Route path="/retailer" element={<RetailerRouterPage />} />    
+            <Route path="/retailer/detail" element={<RetailerDetailPage />} />
+            <Route path="/retailer/create" element={<RetailerCreatePage />} />
+            
         </AnimationRoutes>
     </ZMPRouter>
 );

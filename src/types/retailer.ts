@@ -32,3 +32,32 @@ export interface Retailer {
     note: string
   }[] | null
 } 
+
+export interface CreateRetailerPayload{
+    cccd?: string;
+    ho_ten?: string;
+    ngay_sinh?: string;
+    gioi_tinh?: string;
+    ma_so_thue?: string;
+    email?: string;
+    so_dien_thoai?: string;
+    so_zalo?: string;
+    facebook?: string;
+    dia_chi?: string;
+    phuong_xa?: string;
+    tinh_thanh?: string;
+    ngan_hang?: string;
+    so_tai_khoan?: string;
+    ten_thu_huong?: string;
+    anh_chan_dung?: string; // base64
+    anh_cccd_mat_truoc?: string; // base64
+    anh_cccd_mat_sau?: string; // base64
+    he_thong_ids?: string[];
+}
+
+export interface CreateRetailerResponse {
+  status: string;
+  message: string;
+  retailer_id: Retailer;
+}
+

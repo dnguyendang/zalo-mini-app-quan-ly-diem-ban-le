@@ -5,7 +5,7 @@ import PageLayout from "../../components/layout/PageLayout";
 import { Retailer } from "@/types/retailer";
 import { getRetailerDetail } from "@/service/retailer.service";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Input, Page, Select, Spinner, Text } from 'zmp-ui';
+import { Box, Button, Input, Page, Select, Spinner, Text, Tabs } from 'zmp-ui';
 import { useStore } from "@/store";
 
 
@@ -64,14 +64,15 @@ const RetailerDetailPage: React.FC = () => {
       console.log('Before API call');
       const retailer = await getRetailerDetail();
       console.log('After API call, retailer:', retailer);
+      setRetailer(retailer);
 
-      if (retailer.error) {
-        // Nếu API trả về error
-        setError(retailer.error);
-        setRetailer(null);
-      }else{
-        setRetailer(retailer);
-      }       
+      // if (retailer.error) {
+      //   // Nếu API trả về error
+      //   setError(retailer.error);
+      //   setRetailer(null);
+      // }else{
+      //   setRetailer(retailer);
+      // }       
 
     } catch (error) {
       console.error('Error fetching retailer detail:', error);
@@ -120,114 +121,124 @@ const RetailerDetailPage: React.FC = () => {
               {retailer?.state === "huy_bo" && "Cảm ơn bạn đã đăng ký làm điểm bán lẻ. Đơn đăng ký của bạn đang bị từ chối"}
             </Subtitle>
 
-            <SectionTitle>Thông tin cá nhân</SectionTitle>
-            <MetaInfo>
-              <div tw="flex flex-wrap items-start">
-                {/* <div tw="w-full md:w-1/4 flex flex-col items-center mb-4 md:mb-0">
-                  <img src={retailer?.anh_chan_dung || ''} alt="Ảnh chân dung" tw="rounded mb-2" style={{ maxWidth: 200 }} />
-                  <span tw="font-semibold">Ảnh chân dung</span>
-                </div> */}
-                <div tw="w-full md:w-3/4">
-                  <div tw="flex flex-col md:flex-row md:space-x-8">
-                    <div>
-                      <div><b>Số CCCD:</b> {retailer?.cccd}</div>
-                      <div><b>Họ và tên:</b> {retailer?.ho_ten}</div>
-                      <div><b>Ngày sinh:</b> {retailer?.ngay_sinh}</div>
-                      <div><b>Giới tính:</b> {retailer?.gioi_tinh}</div>
-                      <div><b>Mã số thuế:</b> {retailer?.ma_so_thue}</div>
+            <Tabs id="contact-list">
+              <Tabs.Tab key="tab1" label="Thông tin chung">
+                <SectionTitle>Thông tin cá nhân</SectionTitle>
+                <MetaInfo>
+                  <div tw="flex flex-wrap items-start">
+                    <div tw="w-full md:w-1/4 flex flex-col items-center mb-4 md:mb-0">
+                      <img src={retailer?.anh_chan_dung || ''} alt="Ảnh chân dung" tw="rounded mb-2" style={{ maxWidth: 200 }} />
+                      <span tw="font-semibold">Ảnh chân dung</span>
+                    </div>
+                    <div tw="w-full md:w-3/4">
+                      <div tw="flex flex-col md:flex-row md:space-x-8">
+                        <div>
+                          <div><b>Số CCCD:</b> {retailer?.cccd}</div>
+                          <div><b>Họ và tên:</b> {retailer?.ho_ten}</div>
+                          <div><b>Ngày sinh:</b> {retailer?.ngay_sinh}</div>
+                          <div><b>Giới tính:</b> {retailer?.gioi_tinh}</div>
+                          <div><b>Mã số thuế:</b> {retailer?.ma_so_thue}</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </MetaInfo>
-            {/* <SectionTitle>Giấy tờ tùy thân</SectionTitle>
-            <MetaInfo>
-              <div tw="flex flex-wrap gap-4">
-                <div tw="flex-1 flex flex-col items-center">
-                  <div tw="border p-2 flex items-center justify-center w-full" style={{ minHeight: 250 }}>
-                    <img src={retailer?.anh_cccd_mat_truoc || ''} alt="CCCD mặt trước" tw="max-h-48 object-contain" />
+                </MetaInfo>
+                <SectionTitle>Thông tin liên hệ</SectionTitle>
+                <MetaInfo>
+                  <div tw="flex flex-wrap">
+                    <div tw="w-full md:w-1/2 mb-2">
+                      <div><b>Email:</b> {retailer?.email}</div>
+                      <div><b>Số điện thoại:</b> {retailer?.so_dien_thoai}</div>
+                    </div>
+                    <div tw="w-full md:w-1/2 mb-2">
+                      <div><b>Số Zalo:</b> {retailer?.so_zalo}</div>
+                      <div><b>Facebook:</b> {retailer?.facebook}</div>
+                    </div>
                   </div>
-                  <span tw="font-semibold mt-2">Ảnh CCCD mặt trước</span>
-                </div>
-                <div tw="flex-1 flex flex-col items-center">
-                  <div tw="border p-2 flex items-center justify-center w-full" style={{ minHeight: 250 }}>
-                    <img src={retailer?.anh_cccd_mat_sau || ''} alt="CCCD mặt sau" tw="max-h-48 object-contain" />
+                </MetaInfo>
+                <SectionTitle>Địa bàn</SectionTitle>
+                <MetaInfo>
+                  <div tw="flex flex-wrap">
+                    <div tw="w-full md:w-1/2 mb-2">
+                      <div><b>Địa chỉ:</b> {retailer?.dia_chi}</div>
+                      <div><b>Phường/Xã:</b> {retailer?.phuong_xa}</div>
+                    </div>
+                    <div tw="w-full md:w-1/2 mb-2">
+                      <div><b>Tỉnh/Thành phố:</b> {retailer?.tinh_thanh}</div>
+                    </div>
                   </div>
-                  <span tw="font-semibold mt-2">Ảnh CCCD mặt sau</span>
-                </div>
-              </div>
-            </MetaInfo> */}
+                </MetaInfo>
+                <SectionTitle>Tài khoản ngân hàng</SectionTitle>
+                <MetaInfo>
+                  <div tw="flex flex-wrap">
+                    <div tw="w-full md:w-1/3 mb-2">
+                      <div><b>Ngân hàng:</b> {retailer?.ngan_hang}</div>
+                    </div>
+                    <div tw="w-full md:w-1/3 mb-2">
+                      <div><b>Số tài khoản:</b> {retailer?.so_tai_khoan}</div>
+                    </div>
+                    <div tw="w-full md:w-1/3 mb-2">
+                      <div><b>Tên người thụ hưởng:</b> {retailer?.ten_thu_huong}</div>
+                    </div>
+                  </div>
+                </MetaInfo>
+              </Tabs.Tab>
 
-            <SectionTitle>Thông tin liên hệ</SectionTitle>
-            <MetaInfo>
-              <div tw="flex flex-wrap">
-                <div tw="w-full md:w-1/2 mb-2">
-                  <div><b>Email:</b> {retailer?.email}</div>
-                  <div><b>Số điện thoại:</b> {retailer?.so_dien_thoai}</div>
-                </div>
-                <div tw="w-full md:w-1/2 mb-2">
-                  <div><b>Số Zalo:</b> {retailer?.so_zalo}</div>
-                  <div><b>Facebook:</b> {retailer?.facebook}</div>
-                </div>
-              </div>
-            </MetaInfo>
+              <Tabs.Tab key="tab2" label="Giấy tờ">
+                <SectionTitle>Giấy tờ tùy thân</SectionTitle>
+                  <MetaInfo>
+                    <div tw="flex flex-wrap gap-4">
+                      <div tw="flex-1 flex flex-col items-center">
+                        <div tw="border p-2 flex items-center justify-center w-full" style={{ minHeight: 250 }}>
+                          <img src={retailer?.anh_cccd_mat_truoc || ''} alt="CCCD mặt trước" tw="max-h-48 object-contain" />
+                        </div>
+                        <span tw="font-semibold mt-2">Ảnh CCCD mặt trước</span>
+                      </div>
+                      <div tw="flex-1 flex flex-col items-center">
+                        <div tw="border p-2 flex items-center justify-center w-full" style={{ minHeight: 250 }}>
+                          <img src={retailer?.anh_cccd_mat_sau || ''} alt="CCCD mặt sau" tw="max-h-48 object-contain" />
+                        </div>
+                        <span tw="font-semibold mt-2">Ảnh CCCD mặt sau</span>
+                      </div>
+                    </div>
+                  </MetaInfo>
+              </Tabs.Tab>
 
-            <SectionTitle>Địa bàn</SectionTitle>
-            <MetaInfo>
-              <div tw="flex flex-wrap">
-                <div tw="w-full md:w-1/2 mb-2">
-                  <div><b>Địa chỉ:</b> {retailer?.dia_chi}</div>
-                  <div><b>Phường/Xã:</b> {retailer?.phuong_xa}</div>
-                </div>
-                <div tw="w-full md:w-1/2 mb-2">
-                  <div><b>Tỉnh/Thành phố:</b> {retailer?.tinh_thanh}</div>
-                </div>
-              </div>
-            </MetaInfo>
-
-            <SectionTitle>Tài khoản ngân hàng</SectionTitle>
-            <MetaInfo>
-              <div tw="flex flex-wrap">
-                <div tw="w-full md:w-1/3 mb-2">
-                  <div><b>Ngân hàng:</b> {retailer?.ngan_hang}</div>
-                </div>
-                <div tw="w-full md:w-1/3 mb-2">
-                  <div><b>Số tài khoản:</b> {retailer?.so_tai_khoan}</div>
-                </div>
-                <div tw="w-full md:w-1/3 mb-2">
-                  <div><b>Tên người thụ hưởng:</b> {retailer?.ten_thu_huong}</div>
-                </div>
-              </div>
-            </MetaInfo>
-
-            <SectionTitle>Tài khoản hệ thống</SectionTitle>
-            <MetaInfo>
-              <div tw="overflow-x-auto">
-                <table tw="min-w-[800px] min-w-full border">
-                  <thead>
-                    <tr>
-                      <th tw="border px-4 py-1 w-20">STT</th>
-                      <th tw="border px-4 py-1">Tên hệ thống</th>
-                      <th tw="border px-4 py-1">Tên tài khoản</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {retailer?.tai_khoan_ids?.length === 0 && (
-                      <tr>
-                        <td tw="border px-4 py-1 text-center" colSpan={3}></td>
-                      </tr>
-                    )}
-                    {retailer?.tai_khoan_ids?.map((tk, idx) => (
-                      <tr key={tk.name}>
-                        <td tw="border px-4 py-1 text-center">{idx + 1}</td>
-                        <td tw="border px-4 py-1">{tk.name}</td>
-                        <td tw="border px-4 py-1 w-64">{tk.ten_tai_khoan}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>s
-              </div>
-            </MetaInfo>
+              <Tabs.Tab key="tab3" label="Tài khoản hệ thống">
+                <SectionTitle>Tài khoản hệ thống</SectionTitle>
+                <MetaInfo>
+                  <div tw="overflow-x-auto">
+                    <table tw="min-w-[800px] min-w-full border">
+                      <thead>
+                        <tr>
+                          <th tw="border px-4 py-1 w-20">STT</th>
+                          <th tw="border px-4 py-1">Hệ thống</th>
+                          <th tw="border px-4 py-1">Tài khoản</th>
+                          <th tw="border px-4 py-1">Shop code</th>
+                          <th tw="border px-4 py-1">EMP code</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {retailer?.tai_khoan_ids?.length === 0 && (
+                          <tr>
+                            <td tw="border px-4 py-1 text-center" colSpan={3}></td>
+                          </tr>
+                        )}
+                        {retailer?.tai_khoan_ids?.map((tk, idx) => (
+                          <tr key={tk.name}>
+                            <td tw="border px-4 py-1 text-center">{idx + 1}</td>
+                            <td tw="border px-4 py-1">{tk.name}</td>
+                            <td tw="border px-4 py-1 w-64">{tk.ten_tai_khoan}</td>                            
+                            <td tw="border px-4 py-1 w-64">{tk.shop_code}</td>
+                            <td tw="border px-4 py-1 w-64">{tk.emp_code}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>s
+                  </div>
+                </MetaInfo>
+              </Tabs.Tab>
+            </Tabs>
           </ContentWrapper>
           </>
         )}
