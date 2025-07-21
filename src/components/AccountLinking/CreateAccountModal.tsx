@@ -65,6 +65,10 @@ const CreateAccountModal: React.FC<CreateAccountModalProps> = ({
 
     return (
         <Modal visible={visible} onClose={onClose} title="Đăng ký tài khoản hệ thống">
+            <Text className="text-center mb-4">
+                Bạn chưa có tài khoản hệ thống?
+                Vui lòng điền thông tin để tạo tài khoản mới.
+            </Text>
             <form onSubmit={handleSubmit}>
                 <Box p={4} className="space-y-4">
                     <Input

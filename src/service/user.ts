@@ -80,6 +80,7 @@ export const userService = {
     checkZaloId: async (): Promise<CheckZaloIdResponse> => {
         try {
             const zaloId = await getUserZaloId();   
+            console.log('Checking Zalo ID:', zaloId);
             const response = await fetch(`${API_BASE_URL}/users/api/check-id?zalo_user_id=${zaloId}`, {
                 method: 'GET',
                 headers: {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreateRetailerPayload } from "@/types/retailer";
 import { createRetailer, getRetailerFormOptions } from "@/service/retailer.service";
@@ -7,6 +7,7 @@ import PageLayout from "@/components/layout/PageLayout";
 import tw from "twin.macro";
 import styled from "styled-components";
 import SelectWithArrow from "@/components/select-with-arrow/SelectWithArrow";
+
 
 const Container = styled.div`
   ${tw`p-0 max-w-4xl mx-auto`}
@@ -89,8 +90,8 @@ const RetailerCreatePage: React.FC = () => {
 
     const [options, setOptions] = useState<{
         gioi_tinh?: [string, string][];
-        phuong_xa?: [string, string][];
-        tinh_thanh?: [string, string][];
+        phuong_xa?: {id: number; name: string; tinh_thanh_id: number; tinh_thanh_name: string}[];
+        tinh_thanh?: {id: string; name: string}[];
         ngan_hang?: [string, string][];
     }>({});
 
@@ -102,45 +103,22 @@ const RetailerCreatePage: React.FC = () => {
             .catch(() => setError("Không lấy được dữ liệu lựa chọn cho form"));
     }, []);
 
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
+        // Nếu chọn phường/xã trước → tìm tỉnh tương ứng và gán
+        if (name === "phuong_xa" && options.phuong_xa) {
+            const px = options.phuong_xa.find((item) => String(item.id) === value);
+            if (px) {
+                setForm((prev) => ({
+                    ...prev,
+                    [name]: value,
+                    tinh_thanh: String(px.tinh_thanh_id),
+                }));
+                return;
+            }
+        }
         setForm((prev) => ({ ...prev, [name]: value }));
     };
-
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { value, checked } = e.target;
-        setForm((prev) => {
-            const he_thong_ids = prev.he_thong_ids || [];
-            return {
-                ...prev,
-                he_thong_ids: checked
-                    ? [...he_thong_ids, value]
-                    : he_thong_ids.filter((v) => v !== value),
-            };
-        });
-    };
-
-    // function fileToBase64(file: File): Promise<string> {
-    //     return new Promise((resolve, reject) => {
-    //         const reader = new FileReader();
-    //         reader.onload = () => resolve((reader.result as string).split(",")[1]);
-    //         reader.onerror = reject;
-    //         reader.readAsDataURL(file);
-    //     });
-    // }
-
-    // const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const { name, files } = e.target;
-    //     if (files && files[0]) {
-    //         const base64 = await fileToBase64(files[0]);
-    //         setForm((prev) => ({ ...prev, [name]: base64 }));
-    //         setPreview((prev) => ({
-    //             ...prev,
-    //             [name]: URL.createObjectURL(files[0]),
-    //         }));
-    //     }
-    // };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, files } = e.target;
@@ -184,6 +162,14 @@ const RetailerCreatePage: React.FC = () => {
             setLoading(false);
         }
     };
+
+    const filteredPhuongXa: [string, string][] = useMemo(() => {
+        if (!form.tinh_thanh || !options.phuong_xa) return [];
+        return options.phuong_xa
+            .filter(item => String(item.tinh_thanh_id) === form.tinh_thanh)
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(item => [item.id.toString(), item.name] as [string, string]);
+    }, [form.tinh_thanh, options.phuong_xa]);
 
     return (
         <PageLayout title="Đăng ký điểm bán lẻ" id="retailer-create">
@@ -303,23 +289,28 @@ const RetailerCreatePage: React.FC = () => {
                             clearable
                             label="Địa chỉ *"
                         />
-                        <SelectWithArrow
-                            label="Phường/Xã"
-                            name="phuong_xa"
-                            value={form.phuong_xa || ""}
-                            required
-                            options={options.phuong_xa || []}
-                            onChange={handleInputChange}
-                            placeholder="Chọn phường/xã"
-                        />
+
                         <SelectWithArrow
                             label="Tỉnh/Thành phố"
                             name="tinh_thanh"
                             value={form.tinh_thanh || ""}
                             required
-                            options={options.tinh_thanh || []}
+                            options={(options.tinh_thanh || [])
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map((tt) => [tt.id.toString(), tt.name] as [string, string])
+                            }
                             onChange={handleInputChange}
                             placeholder="Chọn tỉnh/thành phố"
+                        />
+
+                        <SelectWithArrow
+                            label="Phường/Xã"
+                            name="phuong_xa"
+                            value={form.phuong_xa || ""}
+                            required
+                            options={filteredPhuongXa}
+                            onChange={handleInputChange}
+                            placeholder="Chọn phường/xã"
                         />
 
                         <SectionTitle>Thông tin bổ sung</SectionTitle>

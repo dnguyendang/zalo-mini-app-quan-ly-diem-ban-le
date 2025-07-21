@@ -102,7 +102,14 @@ export const createRetailer = async (payload: CreateRetailerPayload): Promise<Cr
         const zalo_user_id = await getUserZaloId();
         const body = JSON.stringify({...payload, zalo_user_id });
 
-        console.log("Payload gửi lên Odoo:", JSON.stringify({...payload, zalo_user_id }));
+        // console.log("Payload gửi lên Odoo:", JSON.stringify({...payload, zalo_user_id }));
+        
+        // Log độ dài của ảnh chân dung (nếu có)
+        if (payload.anh_chan_dung) {
+            console.log("Độ dài payload.anh_chan_dung:", payload.anh_chan_dung.length);
+        } else {
+            console.log("payload.anh_chan_dung không tồn tại hoặc rỗng");
+        }
 
         const response = await fetch(`${API_BASE_URL}/retailers/api/create`, {
             method:'POST',

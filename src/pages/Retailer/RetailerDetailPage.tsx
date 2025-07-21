@@ -234,7 +234,7 @@ const RetailerDetailPage: React.FC = () => {
                           </tr>
                         ))}
                       </tbody>
-                    </table>s
+                    </table>
                   </div>
                 </MetaInfo>
               </Tabs.Tab>
